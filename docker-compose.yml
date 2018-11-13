@@ -1,0 +1,86 @@
+version: '2.1'
+services:
+  nginx:
+    restart: always
+    container_name: ezf_nginx
+    build: ./nginx/
+    ports:
+      - 80:80
+    links:
+      - app
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./logs/nginx:/var/log/nginx
+
+  app:
+    container_name: ezf_app
+    restart: "no"
+    image: thecodingmachine/php:7.2-v2-fpm
+    volumes:
+      - ../../api:/var/www/html
+      - $SSH_AUTH_SOCK:/ssh-agent
+    environment:
+      SSH_AUTH_SOCK: /ssh-agent
+      PHP_EXTENSION_GD: 1
+      PHP_EXTENSION_XDEBUG: 1
+      PHP_EXTENSION_BCMATH: 1
+      PHP_INI_XDEBUG__REMOTE_PORT: 9000
+      PHP_IDE_CONFIG: "serverName=docker_academy"
+      XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
+      STARTUP_COMMAND_1: sudo apt-get install -y ssmtp
+      STARTUP_COMMAND_2: sudo chmod 777 /etc/ssmtp/ssmtp.conf && sudo touch /usr/local/etc/php/conf.d/mail.ini && sudo chmod 777 /usr/local/etc/php/conf.d/mail.ini
+      STARTUP_COMMAND_3: echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf && echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail.ini
+    external_links:
+      - nginx:api.academy.ezf.develop
+      - nginx:api.contacts.ezf.develop
+    links:
+      - redis
+      - mysql
+      - rabbitmq
+
+  mysql:
+    container_name: ezf_mysql
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    volumes:
+      - ./databases:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret_password
+      MYSQL_DATABASE: ezf_academy
+      MYSQL_USER: ezf
+      MYSQL_PASSWORD: BZQbdXhP7J*viO0%cJ0nPfu2
+
+  phpmyadmin:
+    container_name: ezf_pma
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 8084:80
+    links:
+      - app
+      - mysql
+    environment:
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: secret_password
+      PMA_HOST: mysql
+      PMA_ARBITRARY: 1
+
+  redis:
+    image: redis
+    container_name: ezf_redis
+    restart: "no"
+    command: redis-server --requirepass 12345678
+    
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: ezf_rabbit
+    restart: "no"
+    hostname: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - 8085:15672
