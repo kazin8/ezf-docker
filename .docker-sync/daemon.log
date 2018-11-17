@@ -1,0 +1,42 @@
+          ok  Starting native_osx for sync app-sync
+          ok  app-sync container still running, restarting unison in container
+     command  docker exec app-sync supervisorctl restart unison
+unison: stopped
+unison: started
+          ok  starting initial sync of app-sync
+     success  Sync container started
+     success  Showing unison logs from your sync container: app-sync
+[2018-11-16 04:46:08 +0300] Sync Log:  UNISON 2.51.2 (OCAML 4.06.1) started propagating changes at 04:46:07.31 on 16 Nov 2018
+[2018-11-16 04:46:08 +0300] Sync Log:  [BGN] Updating file ez-module-common/.git/COMMIT_EDITMSG from /host_sync to /app_sync
+[2018-11-16 04:46:08 +0300] Sync Log:  [END] Updating file ez-module-common/.git/COMMIT_EDITMSG
+[2018-11-16 04:46:08 +0300] Sync Log:  [BGN] Updating file ez-module-common/.git/index from /host_sync to /app_sync
+[2018-11-16 04:46:08 +0300] Sync Log:  [END] Updating file ez-module-common/.git/index
+[2018-11-16 04:46:08 +0300] Sync Log:  [BGN] Updating file ez-module-common/.git/logs/HEAD from /host_sync to /app_sync
+[2018-11-16 04:46:08 +0300] Sync Log:  [END] Updating file ez-module-common/.git/logs/HEAD
+[2018-11-16 04:46:08 +0300] Sync Log:  [BGN] Updating file ez-module-common/.git/logs/refs/heads/master from /host_sync to /app_sync
+[2018-11-16 04:46:08 +0300] Sync Log:  [END] Updating file ez-module-common/.git/logs/refs/heads/master
+[2018-11-16 04:46:08 +0300] Sync Log:  [BGN] Updating file ez-module-common/.git/logs/refs/remotes/origin/master from /host_sync to /app_sync
+[2018-11-16 04:46:08 +0300] Sync Log:  [END] Updating file ez-module-common/.git/logs/refs/remotes/origin/master
+[2018-11-16 04:46:08 +0300] Sync Log:  [BGN] Updating file ez-module-common/.git/refs/heads/master from /host_sync to /app_sync
+[2018-11-16 04:46:08 +0300] Sync Log:  [END] Updating file ez-module-common/.git/refs/heads/master
+[2018-11-16 04:46:08 +0300] Sync Log:  [BGN] Updating file ez-module-common/.git/refs/remotes/origin/master from /host_sync to /app_sync
+[2018-11-16 04:46:08 +0300] Sync Log:  [END] Updating file ez-module-common/.git/refs/remotes/origin/master
+[2018-11-16 04:46:08 +0300] Sync Log:  [BGN] Copying ez-module-common/.git/objects/04 from /host_sync to /app_sync
+[2018-11-16 04:46:08 +0300] Sync Log:  [END] Copying ez-module-common/.git/objects/04
+[2018-11-16 04:46:08 +0300] Sync Log:  [BGN] Copying ez-module-common/.git/objects/10 from /host_sync to /app_sync
+[2018-11-16 04:46:08 +0300] Sync Log:  [END] Copying ez-module-common/.git/objects/10
+[2018-11-16 04:46:08 +0300] Sync Log:  [BGN] Copying ez-module-common/.git/objects/4e from /host_sync to /app_sync
+[2018-11-16 04:46:08 +0300] Sync Log:  [END] Copying ez-module-common/.git/objects/4e
+[2018-11-16 04:46:08 +0300] Sync Log:  [BGN] Copying ez-module-common/.git/objects/72 from /host_sync to /app_sync
+[2018-11-16 04:46:08 +0300] Sync Log:  [END] Copying ez-module-common/.git/objects/72
+[2018-11-16 04:46:08 +0300] Sync Log:  [BGN] Copying ez-module-common/.git/objects/c9 from /host_sync to /app_sync
+[2018-11-16 04:46:08 +0300] Sync Log:  [END] Copying ez-module-common/.git/objects/c9
+[2018-11-16 04:46:08 +0300] Sync Log:  [BGN] Copying ez-module-common/.git/objects/f7 from /host_sync to /app_sync
+[2018-11-16 04:46:08 +0300] Sync Log:  [END] Copying ez-module-common/.git/objects/f7
+[2018-11-16 04:46:08 +0300] Sync Log:  UNISON 2.51.2 (OCAML 4.06.1) finished propagating changes at 04:46:07.37 on 16 Nov 2018
+[2018-11-16 04:46:08 +0300] Sync Log:  Synchronization complete at 04:46:07  (13 items transferred, 0 skipped, 0 failed)
+[2018-11-16 04:46:09 +0300] Sync Log:  UNISON 2.51.2 (OCAML 4.06.1) started propagating changes at 04:46:08.76 on 16 Nov 2018
+[2018-11-16 04:46:09 +0300] Sync Log:  [BGN] Updating file ez-academy/.idea/workspace.xml from /host_sync to /app_sync
+[2018-11-16 04:46:09 +0300] Sync Log:  [END] Updating file ez-academy/.idea/workspace.xml
+[2018-11-16 04:46:09 +0300] Sync Log:  UNISON 2.51.2 (OCAML 4.06.1) finished propagating changes at 04:46:08.76 on 16 Nov 2018
+[2018-11-16 04:46:09 +0300] Sync Log:  Synchronization complete at 04:46:08  (1 item transferred, 0 skipped, 0 failed)

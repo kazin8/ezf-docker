@@ -1,0 +1,15 @@
+version: "2"
+
+options:
+  verbose: true
+syncs:
+  app-sync: # tip: add -sync and you keep consistent names as a convention
+    src: '../../api'
+    # sync_strategy: 'native_osx' # not needed, this is the default now
+    #sync_excludes: ['ez-user/data/DoctrineORMModule', 'ez-academy/data/DoctrineORMModule', 'ez-contacts/data/DoctrineORMModule', 'ez-notifications/data/DoctrineORMModule', 'ez-module-common/data/DoctrineORMModule']
+    sync_userid: '1000'
+  mysql-sync: # tip: add -sync and you keep consistent names as a convention
+    src: './databases/'
+    # sync_strategy: 'native_osx' # not needed, this is the default now
+    #sync_excludes: ['ez-user/data/DoctrineORMModule', 'ez-academy/data/DoctrineORMModule', 'ez-contacts/data/DoctrineORMModule', 'ez-notifications/data/DoctrineORMModule', 'ez-module-common/data/DoctrineORMModule']
+    sync_userid: '999'

@@ -18,7 +18,7 @@ services:
     restart: "no"
     image: thecodingmachine/php:7.2-v2-fpm
     volumes:
-      - ../../api:/var/www/html
+      - app-sync:/var/www/html:nocopy
       - $SSH_AUTH_SOCK:/ssh-agent
       - ~/.ssh:/home/docker/.ssh:ro
     environment:
@@ -52,7 +52,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./databases:/var/lib/mysql
+      - mysql-sync:/var/lib/mysql:nocopy
     environment:
       MYSQL_ROOT_PASSWORD: secret_password
       MYSQL_DATABASE: ezf_academy
@@ -90,3 +90,9 @@ services:
       - RABBITMQ_DEFAULT_PASS=guest
     ports:
       - 8085:15672
+
+volumes:
+  app-sync:
+    external: true
+  mysql-sync:
+    external: true
