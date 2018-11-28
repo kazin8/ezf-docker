@@ -1,0 +1,5 @@
+.idea
+logs/mysql/query.log
+logs/mysql/slow.log
+logs/nginx/access.log
+logs/nginx/error.log
