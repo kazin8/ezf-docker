@@ -26,6 +26,7 @@ services:
       PHP_EXTENSION_XDEBUG: 1
       PHP_EXTENSION_BCMATH: 1
       PHP_EXTENSION_SOAP: 1
+      PHP_EXTENSION_INTL: 1
       PHP_INI_XDEBUG__REMOTE_PORT: 9000
       PHP_IDE_CONFIG: "serverName=docker_academy"
       XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
@@ -45,6 +46,8 @@ services:
       - nginx:api.contacts.testing.ezf.develop
       - nginx:api.user.testing.ezf.develop
       - nginx:api.player.testing.ezf.develop
+      - nginx:api.cloud.testing.ezf.develop
+      - nginx:api.cloud.ezf.develop
     links:
       - redis
       - mysql
