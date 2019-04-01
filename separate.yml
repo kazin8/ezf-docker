@@ -41,6 +41,8 @@ services:
       - mysql
       - rabbitmq
       - postgres
+    external_links:
+      - nginx:api.notifications.testing.ezf.develop
 
   postgres:
     image: postgres:11.2
