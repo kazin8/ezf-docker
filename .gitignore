@@ -4,5 +4,7 @@ logs/mysql/slow.log
 logs/nginx/access.log
 logs/nginx/error.log
 logs/nginx/
-!databases
-databases/*
+
+mysql/runtime
+mysql/runtime/*
+!mysql/runtime/.gitkeep

@@ -7,53 +7,63 @@ services:
     ports:
       - 80:80
     links:
-      - app
+      - ezf_notifications
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/ez-notifications.conf:/etc/nginx/conf.d/ez-notifications.conf
       - ./logs/nginx:/var/log/nginx
 
-  app:
-    container_name: ezf_app
+  ezf_notifications:
+    container_name: ezf_notifications
     restart: "no"
     image: thecodingmachine/php:7.2-v2-fpm
     volumes:
-      - ../:/var/www/html
+      - ../ez-notifications:/var/www/html/ez-notifications
       - $SSH_AUTH_SOCK:/ssh-agent
+    working_dir: /var/www/html/ez-notifications
     environment:
       SSH_AUTH_SOCK: /ssh-agent
       PHP_EXTENSION_GD: 1
       PHP_EXTENSION_XDEBUG: 1
       PHP_EXTENSION_BCMATH: 1
       PHP_EXTENSION_SOAP: 1
-      PHP_EXTENSION_SOCKETS: 1
       PHP_EXTENSION_INTL: 1
       PHP_EXTENSION_YAML: 1
+      PHP_EXTENSION_PDO_PGSQL: 1
       PHP_INI_XDEBUG__REMOTE_PORT: 9000
-      PHP_IDE_CONFIG: "serverName=docker_academy"
+      PHP_IDE_CONFIG: "serverName=ezf_notifications"
       XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
       STARTUP_COMMAND_1: sudo apt-get install -y ssmtp
       STARTUP_COMMAND_2: sudo chmod 777 /etc/ssmtp/ssmtp.conf && sudo touch /usr/local/etc/php/conf.d/mail.ini && sudo chmod 777 /usr/local/etc/php/conf.d/mail.ini
       STARTUP_COMMAND_3: echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf && echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail.ini
-    external_links:
-      - nginx:api.academy.ezf.develop
-      - nginx:api.contacts.ezf.develop
-      - nginx:api.funnels.ezf.develop
-      - nginx:api.builder.ezf.develop
-      - nginx:api.player.ezf.develop
-      - nginx:api.academy.testing.ezf.develop
-      - nginx:api.user.ezf.develop
-      - nginx:api.builder.testing.ezf.develop
-      - nginx:api.funnels.testing.ezf.develop
-      - nginx:api.contacts.testing.ezf.develop
-      - nginx:api.user.testing.ezf.develop
-      - nginx:api.player.testing.ezf.develop
-      - nginx:api.cloud.testing.ezf.develop
-      - nginx:api.cloud.ezf.develop
     links:
       - redis
       - mysql
       - rabbitmq
+      - postgres
+
+  postgres:
+    image: postgres:11.2
+    container_name: ezf_postgres
+    environment:
+      POSTGRES_PASSWORD: "password"
+    ports:
+      - "15432:5432"
+    volumes:
+      - /databases:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:4.3
+    container_name: ezf_pga
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "kazin8@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "password"
+    ports:
+      - "8086:80"
+    depends_on:
+      - postgres
+    links:
+      - postgres
 
   mysql:
     container_name: ezf_mysql
@@ -61,13 +71,13 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./databases:/var/lib/mysql
+      - ./mysql/runtime:/var/lib/mysql
+      - ./mysql/init_scripts:/docker-entrypoint-initdb.d/
       - ./logs/mysql:/var/log/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: secret_password
-      MYSQL_DATABASE: ezf_academy
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: ezf
-      MYSQL_PASSWORD: BZQbdXhP7J*viO0%cJ0nPfu2
+      MYSQL_PASSWORD: ezf
 
   phpmyadmin:
     container_name: ezf_pma
@@ -76,7 +86,6 @@ services:
     ports:
       - 8084:80
     links:
-      - app
       - mysql
     environment:
       MYSQL_USERNAME: root
@@ -91,7 +100,6 @@ services:
     container_name: ezf_redis
     restart: "no"
     command: redis-server --requirepass 12345678
-
 
   rabbitmq:
     image: rabbitmq:management
