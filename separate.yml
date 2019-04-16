@@ -20,6 +20,7 @@ services:
     volumes:
       - ../ez-notifications:/var/www/html/ez-notifications
       - $SSH_AUTH_SOCK:/ssh-agent
+      - ../:/var/www/html/ez-notifications/data/source
     working_dir: /var/www/html/ez-notifications
     environment:
       SSH_AUTH_SOCK: /ssh-agent
