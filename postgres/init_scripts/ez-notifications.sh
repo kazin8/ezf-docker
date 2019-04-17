@@ -25,3 +25,4 @@ EOSQL
 
 echo "host ez_notifications ezf all md5" >> "$PGDATA/pg_hba.conf"
 echo "host ez_notifications_test ezf all md5" >> "$PGDATA/pg_hba.conf"
+echo "host ez_notifications_test ezf_test all md5" >> "$PGDATA/pg_hba.conf"

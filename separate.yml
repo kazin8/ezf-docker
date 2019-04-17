@@ -49,7 +49,7 @@ services:
     image: postgres:11.2
     container_name: ezf_postgres
     environment:
-      POSTGRES_PASSWORD: "password"
+      POSTGRES_PASSWORD: "postgres"
     ports:
       - "6543:5432"
     volumes:
@@ -58,15 +58,13 @@ services:
       - ./logs/postgres:/var/log/postgresql/
 
   pgadmin:
-    image: dpage/pgadmin4:4.3
-    container_name: ezf_pga
+    image: dpage/pgadmin4:4.5
+    container_name: ezf_pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: "kazin8@gmail.com"
-      PGADMIN_DEFAULT_PASSWORD: "password"
+      PGADMIN_DEFAULT_EMAIL: "email@dot.com"
+      PGADMIN_DEFAULT_PASSWORD: "q1w2e3r4"
     ports:
-      - "8086:80"
-    depends_on:
-      - postgres
+      - "5050:80"
     links:
       - postgres
 
