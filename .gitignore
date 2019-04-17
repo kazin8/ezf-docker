@@ -1,10 +1,21 @@
 .idea
-logs/mysql/query.log
-logs/mysql/slow.log
-logs/nginx/access.log
-logs/nginx/error.log
-logs/nginx/
+
+!logs/mysql/
+!logs/mysql/.gitkeep
+logs/mysql/*
+
+!logs/nginx/
+!logs/nginx/.gitkeep
+logs/nginx/*
+
+!logs/postgres/
+!logs/postgres/.gitkeep
+logs/postgres/*
 
 mysql/runtime
 mysql/runtime/*
 !mysql/runtime/.gitkeep
+
+postgres/runtime
+postgres/runtime/*
+!postgres/runtime/.gitkeep

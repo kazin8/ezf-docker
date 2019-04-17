@@ -51,9 +51,11 @@ services:
     environment:
       POSTGRES_PASSWORD: "password"
     ports:
-      - "15432:5432"
+      - "6543:5432"
     volumes:
-      - /databases:/var/lib/postgresql/data
+      - ./postgres/runtime/data:/var/lib/postgresql/data
+      - ./postgres/init_scripts:/docker-entrypoint-initdb.d/
+      - ./logs/postgres:/var/log/postgresql/
 
   pgadmin:
     image: dpage/pgadmin4:4.3
