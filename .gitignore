@@ -16,6 +16,10 @@ mysql/runtime
 mysql/runtime/*
 !mysql/runtime/.gitkeep
 
+pgadmin/runtime
+pgadmin/runtime/*
+!pgadmin/runtime/.gitkeep
+
 postgres/runtime
 postgres/runtime/*
 !postgres/runtime/.gitkeep

@@ -102,6 +102,8 @@ services:
       - "5050:80"
     links:
       - postgres
+    volumes:
+      - ./pgadmin/runtime:/var/lib/pgadmin
 
   mysql:
     container_name: ezf_mysql
