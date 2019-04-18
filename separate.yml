@@ -8,6 +8,7 @@ services:
       - 80:80
     links:
       - ezf_notifications
+      - ezf_builder
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/ez-notifications.conf:/etc/nginx/conf.d/ez-notifications.conf
@@ -45,7 +46,7 @@ services:
       - rabbitmq
       - postgres
     external_links:
-      - nginx:api.notifications.testing.ezf.develop
+      - nginx:api.builder.testing.ezf.develop
 
   ezf_notifications:
     container_name: ezf_notifications
