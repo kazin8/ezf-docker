@@ -9,10 +9,12 @@ services:
     links:
       - ezf_notifications
       - ezf_builder
+      - ezf_user
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/ez-notifications.conf:/etc/nginx/conf.d/ez-notifications.conf
       - ./nginx/ez-builder.conf:/etc/nginx/conf.d/ez-builder.conf
+      - ./nginx/ez-user.conf:/etc/nginx/conf.d/ez-user.conf
       - ./logs/nginx:/var/log/nginx
 
   ezf_builder:
@@ -77,8 +79,55 @@ services:
       - mysql
       - rabbitmq
       - postgres
+      - hotcoder_tunnel
     external_links:
       - nginx:api.notifications.testing.ezf.develop
+
+  ezf_user:
+    container_name: ezf_user
+    restart: "no"
+    image: thecodingmachine/php:7.2-v2-fpm
+    volumes:
+      - ../ez-user:/var/www/html/ez-user
+      - $SSH_AUTH_SOCK:/ssh-agent
+      - ../:/var/www/html/ez-user/data/source
+    working_dir: /var/www/html/ez-user
+    environment:
+      SSH_AUTH_SOCK: /ssh-agent
+      PHP_EXTENSION_GD: 1
+      PHP_EXTENSION_XDEBUG: 1
+      PHP_EXTENSION_BCMATH: 1
+      PHP_EXTENSION_SOAP: 1
+      PHP_EXTENSION_INTL: 1
+      PHP_EXTENSION_YAML: 1
+      PHP_EXTENSION_PDO_PGSQL: 1
+      PHP_INI_XDEBUG__REMOTE_PORT: 9000
+      PHP_IDE_CONFIG: "serverName=ezf_user"
+      XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
+      STARTUP_COMMAND_1: sudo apt-get install -y ssmtp
+      STARTUP_COMMAND_2: sudo chmod 777 /etc/ssmtp/ssmtp.conf && sudo touch /usr/local/etc/php/conf.d/mail.ini && sudo chmod 777 /usr/local/etc/php/conf.d/mail.ini
+      STARTUP_COMMAND_3: echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf && echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail.ini
+    links:
+      - redis
+      - mysql
+      - rabbitmq
+      - postgres
+      - hotcoder_tunnel
+    external_links:
+      - nginx:api.user.testing.ezf.develop
+
+  hotcoder_tunnel:
+    image: awful/ssh_supervisord:latest
+    build: ./ssh
+    container_name: hotcoder_tunnel
+    environment:
+      SSH_AUTH_SOCK: /ssh-agent
+    volumes:
+      - $SSH_AUTH_SOCK:/ssh-agent
+      - ~/.ssh/:/ssh
+      - ~/.ssh/known_hosts:/root/.ssh/known_hosts
+      - ./ssh/hotcoder_tunnel/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+      - ./logs/supervisord/hotcoder:/var/log/supervisor
 
   postgres:
     image: postgres:11.2

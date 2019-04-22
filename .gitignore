@@ -12,6 +12,10 @@ logs/nginx/*
 !logs/postgres/.gitkeep
 logs/postgres/*
 
+!logs/supervisord/
+!logs/supervisord/.gitkeep
+logs/supervisord/*
+
 mysql/runtime
 mysql/runtime/*
 !mysql/runtime/.gitkeep
