@@ -39,6 +39,8 @@ services:
       PHP_INI_XDEBUG__REMOTE_PORT: 9000
       PHP_IDE_CONFIG: "serverName=ezf_builder"
       XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
+      PHP_EXTENSION_BLACKFIRE: 1
+      BLACKFIRE_AGENT: blackfire
       STARTUP_COMMAND_1: sudo apt-get install -y ssmtp
       STARTUP_COMMAND_2: sudo chmod 777 /etc/ssmtp/ssmtp.conf && sudo touch /usr/local/etc/php/conf.d/mail.ini && sudo chmod 777 /usr/local/etc/php/conf.d/mail.ini
       STARTUP_COMMAND_3: echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf && echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail.ini
@@ -47,6 +49,8 @@ services:
       - mysql
       - rabbitmq
       - postgres
+      - hotcoder_tunnel
+      - blackfire
     external_links:
       - nginx:api.builder.testing.ezf.develop
 
@@ -71,6 +75,8 @@ services:
       PHP_INI_XDEBUG__REMOTE_PORT: 9000
       PHP_IDE_CONFIG: "serverName=ezf_notifications"
       XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
+      PHP_EXTENSION_BLACKFIRE: 1
+      BLACKFIRE_AGENT: blackfire
       STARTUP_COMMAND_1: sudo apt-get install -y ssmtp
       STARTUP_COMMAND_2: sudo chmod 777 /etc/ssmtp/ssmtp.conf && sudo touch /usr/local/etc/php/conf.d/mail.ini && sudo chmod 777 /usr/local/etc/php/conf.d/mail.ini
       STARTUP_COMMAND_3: echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf && echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail.ini
@@ -80,6 +86,8 @@ services:
       - rabbitmq
       - postgres
       - hotcoder_tunnel
+      - hotcoder_tunnel
+      - blackfire
     external_links:
       - nginx:api.notifications.testing.ezf.develop
 
@@ -104,6 +112,8 @@ services:
       PHP_INI_XDEBUG__REMOTE_PORT: 9000
       PHP_IDE_CONFIG: "serverName=ezf_user"
       XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
+      PHP_EXTENSION_BLACKFIRE: 1
+      BLACKFIRE_AGENT: blackfire
       STARTUP_COMMAND_1: sudo apt-get install -y ssmtp
       STARTUP_COMMAND_2: sudo chmod 777 /etc/ssmtp/ssmtp.conf && sudo touch /usr/local/etc/php/conf.d/mail.ini && sudo chmod 777 /usr/local/etc/php/conf.d/mail.ini
       STARTUP_COMMAND_3: echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf && echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail.ini
@@ -113,6 +123,7 @@ services:
       - rabbitmq
       - postgres
       - hotcoder_tunnel
+      - blackfire
     external_links:
       - nginx:api.user.testing.ezf.develop
 
@@ -128,6 +139,16 @@ services:
       - ~/.ssh/known_hosts:/root/.ssh/known_hosts
       - ./ssh/hotcoder_tunnel/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
       - ./logs/supervisord/hotcoder:/var/log/supervisor
+
+  blackfire:
+    image: blackfire/blackfire
+    container_name: blackfire
+    environment:
+      BLACKFIRE_CLIENT_ID: "1cfbf447-4690-481f-be11-6f7d62ced01a"
+      BLACKFIRE_CLIENT_TOKEN: "42ce868ad3a47a891625b32694db225583aca8c93c5fc584f6d867f02699e657"
+      BLACKFIRE_SERVER_ID: "513bf520-8de9-4961-b042-bd890cc325bb"
+      BLACKFIRE_SERVER_TOKEN: "d7a05200b1c6fc4be3816c80007150a312e0c2170f3931225b9205b62d8f3f4f"
+      BLACKFIRE_LOG_LEVEL: 4
 
   postgres:
     image: postgres:11.2
