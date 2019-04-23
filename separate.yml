@@ -86,7 +86,6 @@ services:
       - rabbitmq
       - postgres
       - hotcoder_tunnel
-      - hotcoder_tunnel
       - blackfire
     external_links:
       - nginx:api.notifications.testing.ezf.develop
