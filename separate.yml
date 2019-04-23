@@ -29,6 +29,7 @@ services:
     environment:
       SSH_AUTH_SOCK: /ssh-agent
       PHP_EXTENSION_GD: 1
+      PHP_EXTENSION_APCU: 1
       PHP_EXTENSION_XDEBUG: 1
       PHP_EXTENSION_BCMATH: 1
       PHP_EXTENSION_SOAP: 1
@@ -66,6 +67,7 @@ services:
     environment:
       SSH_AUTH_SOCK: /ssh-agent
       PHP_EXTENSION_GD: 1
+      PHP_EXTENSION_APCU: 1
       PHP_EXTENSION_XDEBUG: 1
       PHP_EXTENSION_BCMATH: 1
       PHP_EXTENSION_SOAP: 1
@@ -102,6 +104,7 @@ services:
     environment:
       SSH_AUTH_SOCK: /ssh-agent
       PHP_EXTENSION_GD: 1
+      PHP_EXTENSION_APCU: 1
       PHP_EXTENSION_XDEBUG: 1
       PHP_EXTENSION_BCMATH: 1
       PHP_EXTENSION_SOAP: 1
@@ -125,6 +128,33 @@ services:
       - blackfire
     external_links:
       - nginx:api.user.testing.ezf.develop
+
+  jad:
+    container_name: jad
+    restart: "no"
+    image: thecodingmachine/php:7.2-v2-fpm
+    volumes:
+      - ../jad:/var/www/html/jad
+      - $SSH_AUTH_SOCK:/ssh-agent
+    working_dir: /var/www/html/jad
+    environment:
+      SSH_AUTH_SOCK: /ssh-agent
+      PHP_EXTENSION_GD: 1
+      PHP_EXTENSION_APCU: 1
+      PHP_EXTENSION_XDEBUG: 1
+      PHP_EXTENSION_BCMATH: 1
+      PHP_EXTENSION_SOAP: 1
+      PHP_EXTENSION_INTL: 1
+      PHP_EXTENSION_YAML: 1
+      PHP_EXTENSION_PDO_PGSQL: 1
+      PHP_INI_XDEBUG__REMOTE_PORT: 9000
+      PHP_IDE_CONFIG: "serverName=jad"
+      XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
+    links:
+      - redis
+      - mysql
+      - rabbitmq
+      - postgres
 
   hotcoder_tunnel:
     image: awful/ssh_supervisord:latest
