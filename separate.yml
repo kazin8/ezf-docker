@@ -10,11 +10,13 @@ services:
       - ezf_notifications
       - ezf_builder
       - ezf_user
+      - ezf_academy
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/ez-builder.conf:/etc/nginx/conf.d/ez-builder.conf
       - ./nginx/ez-notifications.conf:/etc/nginx/conf.d/ez-notifications.conf
       - ./nginx/ez-user.conf:/etc/nginx/conf.d/ez-user.conf
+      - ./nginx/ez-academy.conf:/etc/nginx/conf.d/ez-academy.conf
       - ./logs/nginx:/var/log/nginx
 
   ezf_builder:
@@ -131,6 +133,43 @@ services:
       - blackfire
     external_links:
       - nginx:api.user.testing.ezf.develop
+
+  ezf_academy:
+    container_name: ezf_academy
+    restart: "no"
+    image: thecodingmachine/php:7.2-v2-fpm
+    volumes:
+      - ../ez-academy:/var/www/html/ez-academy
+      - $SSH_AUTH_SOCK:/ssh-agent
+      - ../:/var/www/html/ez-academy/data/source
+    working_dir: /var/www/html/ez-academy
+    environment:
+      SSH_AUTH_SOCK: /ssh-agent
+      PHP_EXTENSION_GD: 1
+      PHP_EXTENSION_APCU: 1
+      PHP_EXTENSION_BCMATH: 1
+      PHP_EXTENSION_SOAP: 1
+      PHP_EXTENSION_INTL: 1
+      PHP_EXTENSION_YAML: 1
+      PHP_EXTENSION_PDO_PGSQL: 1
+
+      PHP_EXTENSION_XDEBUG: 1
+      PHP_INI_XDEBUG__REMOTE_PORT: 9000
+      PHP_IDE_CONFIG: "serverName=ezf_academy"
+      XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
+
+      PHP_EXTENSION_BLACKFIRE: 1
+      BLACKFIRE_AGENT: blackfire
+
+    links:
+      - redis
+      - mysql
+      - rabbitmq
+      - postgres
+      - hotcoder_tunnel
+      - blackfire
+    external_links:
+      - nginx:api.academy.testing.ezf.develop
 
   jad:
     container_name: jad
