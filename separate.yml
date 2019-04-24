@@ -11,12 +11,14 @@ services:
       - ezf_builder
       - ezf_user
       - ezf_academy
+      - ezf_funnels
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/ez-builder.conf:/etc/nginx/conf.d/ez-builder.conf
       - ./nginx/ez-notifications.conf:/etc/nginx/conf.d/ez-notifications.conf
       - ./nginx/ez-user.conf:/etc/nginx/conf.d/ez-user.conf
       - ./nginx/ez-academy.conf:/etc/nginx/conf.d/ez-academy.conf
+      - ./nginx/ez-funnels.conf:/etc/nginx/conf.d/ez-funnels.conf
       - ./logs/nginx:/var/log/nginx
 
   ezf_builder:
@@ -115,6 +117,7 @@ services:
       PHP_EXTENSION_INTL: 1
       PHP_EXTENSION_YAML: 1
       PHP_EXTENSION_PDO_PGSQL: 1
+      PHP_EXTENSION_SOCKETS: 1
 
       PHP_EXTENSION_XDEBUG: 1
       PHP_INI_XDEBUG__REMOTE_PORT: 9000
@@ -152,12 +155,51 @@ services:
       PHP_EXTENSION_INTL: 1
       PHP_EXTENSION_YAML: 1
       PHP_EXTENSION_PDO_PGSQL: 1
+      PHP_EXTENSION_SOCKETS: 1
 
       PHP_EXTENSION_XDEBUG: 1
       PHP_INI_XDEBUG__REMOTE_PORT: 9000
       PHP_IDE_CONFIG: "serverName=ezf_academy"
       XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
 
+#      PHP_EXTENSION_BLACKFIRE: 1
+#      BLACKFIRE_AGENT: blackfire
+
+    links:
+      - redis
+      - mysql
+      - rabbitmq
+      - postgres
+      - hotcoder_tunnel
+      - blackfire
+    external_links:
+      - nginx:api.academy.testing.ezf.develop
+
+  ezf_funnels:
+    container_name: ezf_funnels
+    restart: "no"
+    image: thecodingmachine/php:7.2-v2-fpm
+    volumes:
+      - ../ez-funnels:/var/www/html/ez-funnels
+      - $SSH_AUTH_SOCK:/ssh-agent
+      - ../:/var/www/html/ez-funnels/data/source
+    working_dir: /var/www/html/ez-funnels
+    environment:
+      SSH_AUTH_SOCK: /ssh-agent
+      PHP_EXTENSION_GD: 1
+      PHP_EXTENSION_APCU: 1
+      PHP_EXTENSION_BCMATH: 1
+      PHP_EXTENSION_SOAP: 1
+      PHP_EXTENSION_INTL: 1
+      PHP_EXTENSION_YAML: 1
+      PHP_EXTENSION_PDO_PGSQL: 1
+      PHP_EXTENSION_SOCKETS: 1
+
+#      PHP_EXTENSION_XDEBUG: 1
+#      PHP_INI_XDEBUG__REMOTE_PORT: 9000
+#      PHP_IDE_CONFIG: "serverName=ezf_funnels"
+#      XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
+#
       PHP_EXTENSION_BLACKFIRE: 1
       BLACKFIRE_AGENT: blackfire
 
@@ -169,7 +211,7 @@ services:
       - hotcoder_tunnel
       - blackfire
     external_links:
-      - nginx:api.academy.testing.ezf.develop
+      - nginx:api.funnels.testing.ezf.develop
 
   jad:
     container_name: jad
