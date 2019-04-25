@@ -41,13 +41,13 @@ services:
       PHP_EXTENSION_PDO_PGSQL: 1
       PHP_EXTENSION_SOCKETS: 1
 
-      PHP_EXTENSION_XDEBUG: 1
+      PHP_EXTENSION_XDEBUG: $DOCKER_BLACKFIRE_ENABLED
       PHP_INI_XDEBUG__REMOTE_PORT: 9000
       PHP_IDE_CONFIG: "serverName=ezf_builder"
       XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
 
-#      PHP_EXTENSION_BLACKFIRE: 1
-#      BLACKFIRE_AGENT: blackfire
+      PHP_EXTENSION_BLACKFIRE: $DOCKER_BLACKFIRE_ENABLED
+      BLACKFIRE_AGENT: blackfire
 
     links:
       - redis
@@ -79,12 +79,12 @@ services:
       PHP_EXTENSION_PDO_PGSQL: 1
       PHP_INI_XDEBUG__REMOTE_PORT: 9000
 
-      PHP_EXTENSION_XDEBUG: 1
+      PHP_EXTENSION_XDEBUG: $DOCKER_BLACKFIRE_ENABLED
       PHP_IDE_CONFIG: "serverName=ezf_notifications"
       XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
 
-#      PHP_EXTENSION_BLACKFIRE: 1
-#      BLACKFIRE_AGENT: blackfire
+      PHP_EXTENSION_BLACKFIRE: $DOCKER_BLACKFIRE_ENABLED
+      BLACKFIRE_AGENT: blackfire
 
       STARTUP_COMMAND_1: sudo apt-get install -y ssmtp
       STARTUP_COMMAND_2: sudo chmod 777 /etc/ssmtp/ssmtp.conf && sudo touch /usr/local/etc/php/conf.d/mail.ini && sudo chmod 777 /usr/local/etc/php/conf.d/mail.ini
@@ -119,13 +119,13 @@ services:
       PHP_EXTENSION_PDO_PGSQL: 1
       PHP_EXTENSION_SOCKETS: 1
 
-      PHP_EXTENSION_XDEBUG: 1
+      PHP_EXTENSION_XDEBUG: $DOCKER_BLACKFIRE_ENABLED
       PHP_INI_XDEBUG__REMOTE_PORT: 9000
       PHP_IDE_CONFIG: "serverName=ezf_user"
       XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
 
-#      PHP_EXTENSION_BLACKFIRE: 1
-#      BLACKFIRE_AGENT: blackfire
+      PHP_EXTENSION_BLACKFIRE: $DOCKER_BLACKFIRE_ENABLED
+      BLACKFIRE_AGENT: blackfire
 
     links:
       - redis
@@ -157,13 +157,13 @@ services:
       PHP_EXTENSION_PDO_PGSQL: 1
       PHP_EXTENSION_SOCKETS: 1
 
-      PHP_EXTENSION_XDEBUG: 1
+      PHP_EXTENSION_XDEBUG: $DOCKER_BLACKFIRE_ENABLED
       PHP_INI_XDEBUG__REMOTE_PORT: 9000
       PHP_IDE_CONFIG: "serverName=ezf_academy"
       XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
 
-#      PHP_EXTENSION_BLACKFIRE: 1
-#      BLACKFIRE_AGENT: blackfire
+      PHP_EXTENSION_BLACKFIRE: $DOCKER_BLACKFIRE_ENABLED
+      BLACKFIRE_AGENT: blackfire
 
     links:
       - redis
@@ -195,12 +195,12 @@ services:
       PHP_EXTENSION_PDO_PGSQL: 1
       PHP_EXTENSION_SOCKETS: 1
 
-#      PHP_EXTENSION_XDEBUG: 1
-#      PHP_INI_XDEBUG__REMOTE_PORT: 9000
-#      PHP_IDE_CONFIG: "serverName=ezf_funnels"
-#      XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
-#
-      PHP_EXTENSION_BLACKFIRE: 1
+      PHP_EXTENSION_XDEBUG: $DOCKER_BLACKFIRE_ENABLED
+      PHP_INI_XDEBUG__REMOTE_PORT: 9000
+      PHP_IDE_CONFIG: "serverName=ezf_funnels"
+      XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
+
+      PHP_EXTENSION_BLACKFIRE: $DOCKER_BLACKFIRE_ENABLED
       BLACKFIRE_AGENT: blackfire
 
     links:
@@ -225,7 +225,7 @@ services:
       SSH_AUTH_SOCK: /ssh-agent
       PHP_EXTENSION_GD: 1
       PHP_EXTENSION_APCU: 1
-      PHP_EXTENSION_XDEBUG: 1
+      PHP_EXTENSION_XDEBUG: $DOCKER_BLACKFIRE_ENABLED
       PHP_EXTENSION_BCMATH: 1
       PHP_EXTENSION_SOAP: 1
       PHP_EXTENSION_INTL: 1
