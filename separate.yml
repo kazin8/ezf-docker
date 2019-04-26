@@ -31,6 +31,7 @@ services:
       - ../ez-builder:/var/www/html/ez-builder
       - $SSH_AUTH_SOCK:/ssh-agent
       - ../:/var/www/html/ez-builder/data/source
+      - ~/.composer:/home/docker/.composer
     working_dir: /var/www/html/ez-builder
     environment:
       SSH_AUTH_SOCK: /ssh-agent
@@ -69,6 +70,7 @@ services:
       - ../ez-notifications:/var/www/html/ez-notifications
       - $SSH_AUTH_SOCK:/ssh-agent
       - ../:/var/www/html/ez-notifications/data/source
+      - ~/.composer:/home/docker/.composer
     working_dir: /var/www/html/ez-notifications
     environment:
       SSH_AUTH_SOCK: /ssh-agent
@@ -109,6 +111,7 @@ services:
       - ../ez-user:/var/www/html/ez-user
       - $SSH_AUTH_SOCK:/ssh-agent
       - ../:/var/www/html/ez-user/data/source
+      - ~/.composer:/home/docker/.composer
     working_dir: /var/www/html/ez-user
     environment:
       SSH_AUTH_SOCK: /ssh-agent
@@ -147,6 +150,7 @@ services:
       - ../ez-academy:/var/www/html/ez-academy
       - $SSH_AUTH_SOCK:/ssh-agent
       - ../:/var/www/html/ez-academy/data/source
+      - ~/.composer:/home/docker/.composer
     working_dir: /var/www/html/ez-academy
     environment:
       SSH_AUTH_SOCK: /ssh-agent
@@ -185,6 +189,7 @@ services:
       - ../ez-funnels:/var/www/html/ez-funnels
       - $SSH_AUTH_SOCK:/ssh-agent
       - ../:/var/www/html/ez-funnels/data/source
+      - ~/.composer:/home/docker/.composer
     working_dir: /var/www/html/ez-funnels
     environment:
       SSH_AUTH_SOCK: /ssh-agent
@@ -223,6 +228,7 @@ services:
       - ../ez-webinar:/var/www/html/ez-webinar
       - $SSH_AUTH_SOCK:/ssh-agent
       - ../:/var/www/html/ez-webinar/data/source
+      - ~/.composer:/home/docker/.composer
     working_dir: /var/www/html/ez-webinar
     environment:
       SSH_AUTH_SOCK: /ssh-agent
