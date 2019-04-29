@@ -15,6 +15,7 @@ services:
       - ezf_webinar
       - ezf_contacts
       - ezf_cloud
+      - ezf_pages
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/ez-builder.conf:/etc/nginx/conf.d/ez-builder.conf
@@ -25,6 +26,7 @@ services:
       - ./nginx/ez-webinar.conf:/etc/nginx/conf.d/ez-webinar.conf
       - ./nginx/ez-contacts.conf:/etc/nginx/conf.d/ez-contacts.conf
       - ./nginx/ez-cloud.conf:/etc/nginx/conf.d/ez-cloud.conf
+      - ./nginx/ez-pages.conf:/etc/nginx/conf.d/ez-pages.conf
       - ./logs/nginx:/var/log/nginx
     volumes_from:
       - ezf_cloud
@@ -343,6 +345,44 @@ services:
       - blackfire
     external_links:
       - nginx:api.cloud.testing.ezf.develop
+
+  ezf_pages:
+    container_name: ezf_pages
+    restart: "no"
+    image: thecodingmachine/php:7.2-v2-fpm
+    volumes:
+      - ../ez-pages:/var/www/html/ez-pages
+      - $SSH_AUTH_SOCK:/ssh-agent
+      - ../:/var/www/html/ez-pages/data/source
+      - ~/.composer:/home/docker/.composer
+    working_dir: /var/www/html/ez-pages
+    environment:
+      SSH_AUTH_SOCK: /ssh-agent
+      PHP_EXTENSION_GD: 1
+      PHP_EXTENSION_APCU: 1
+      PHP_EXTENSION_BCMATH: 1
+      PHP_EXTENSION_SOAP: 1
+      PHP_EXTENSION_INTL: 1
+      PHP_EXTENSION_YAML: 1
+      PHP_EXTENSION_PDO_PGSQL: 1
+      PHP_EXTENSION_SOCKETS: 1
+
+      PHP_EXTENSION_XDEBUG: $DOCKER_XDEBUG_ENABLED
+      PHP_INI_XDEBUG__REMOTE_PORT: 9000
+      PHP_IDE_CONFIG: "serverName=ezf_pages"
+      XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
+
+      PHP_EXTENSION_BLACKFIRE: $DOCKER_BLACKFIRE_ENABLED
+      BLACKFIRE_AGENT: blackfire
+    links:
+      - redis
+      - mysql
+      - rabbitmq
+      - postgres
+      - hotcoder_tunnel
+      - blackfire
+    external_links:
+      - nginx:api.pages.testing.ezf.develop
 
   jad:
     container_name: jad
