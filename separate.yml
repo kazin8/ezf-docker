@@ -26,6 +26,8 @@ services:
       - ./nginx/ez-contacts.conf:/etc/nginx/conf.d/ez-contacts.conf
       - ./nginx/ez-cloud.conf:/etc/nginx/conf.d/ez-cloud.conf
       - ./logs/nginx:/var/log/nginx
+    volumes_from:
+      - ezf_cloud
 
   ezf_builder:
     container_name: ezf_builder
@@ -343,7 +345,7 @@ services:
       - nginx:api.cloud.testing.ezf.develop
 
   jad:
-    container_name: jadl
+    container_name: jad
     restart: "no"
     image: thecodingmachine/php:7.2-v2-fpm
     volumes:
