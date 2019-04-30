@@ -424,6 +424,44 @@ services:
     external_links:
       - nginx:api.player.testing.ezf.develop
 
+  ezf_statistic:
+    container_name: ezf_statistic
+    restart: "no"
+    image: thecodingmachine/php:7.2-v2-fpm
+    volumes:
+      - ../ez-statistic:/var/www/html/ez-statistic
+      - $SSH_AUTH_SOCK:/ssh-agent
+      - ../:/var/www/html/ez-statistic/data/source
+      - ~/.composer:/home/docker/.composer
+    working_dir: /var/www/html/ez-statistic
+    environment:
+      SSH_AUTH_SOCK: /ssh-agent
+      PHP_EXTENSION_GD: 1
+      PHP_EXTENSION_APCU: 1
+      PHP_EXTENSION_BCMATH: 1
+      PHP_EXTENSION_SOAP: 1
+      PHP_EXTENSION_INTL: 1
+      PHP_EXTENSION_YAML: 1
+      PHP_EXTENSION_PDO_PGSQL: 1
+      PHP_EXTENSION_SOCKETS: 1
+
+      PHP_EXTENSION_XDEBUG: $DOCKER_XDEBUG_ENABLED
+      PHP_INI_XDEBUG__REMOTE_PORT: 9000
+      PHP_IDE_CONFIG: "serverName=ezf_statistic"
+      XDEBUG_CONFIG: "remote_port=9000 remote_autostart=1"
+
+      PHP_EXTENSION_BLACKFIRE: $DOCKER_BLACKFIRE_ENABLED
+      BLACKFIRE_AGENT: blackfire
+    links:
+      - redis
+      - mysql
+      - rabbitmq
+      - postgres
+      - hotcoder_tunnel
+      - blackfire
+    external_links:
+      - nginx:api.statistic.testing.ezf.develop
+
   jad:
     container_name: jad
     restart: "no"
