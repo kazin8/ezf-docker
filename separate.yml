@@ -17,6 +17,7 @@ services:
       - ezf_cloud
       - ezf_pages
       - ezf_player
+      - ezf_statistic
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/ez-builder.conf:/etc/nginx/conf.d/ez-builder.conf
@@ -29,6 +30,7 @@ services:
       - ./nginx/ez-cloud.conf:/etc/nginx/conf.d/ez-cloud.conf
       - ./nginx/ez-pages.conf:/etc/nginx/conf.d/ez-pages.conf
       - ./nginx/ez-player.conf:/etc/nginx/conf.d/ez-player.conf
+      - ./nginx/ez-statistic.conf:/etc/nginx/conf.d/ez-statistic.conf
       - ./logs/nginx:/var/log/nginx
     volumes_from:
       - ezf_cloud
