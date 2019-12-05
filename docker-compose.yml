@@ -5,7 +5,7 @@ services:
     container_name: ezf_nginx
     build: ./nginx/
     ports:
-      - 80:80
+      - 8080:80
     links:
       - app
     volumes:
@@ -28,6 +28,9 @@ services:
       PHP_EXTENSION_BCMATH: 1
       PHP_EXTENSION_SOAP: 1
       PHP_EXTENSION_INTL: 1
+      PHP_EXTENSION_MEMCACHED: 1
+      PHP_EXTENSION_MONGODB: 1
+      PHP_EXTENSION_SOCKETS: 1
       PHP_INI_XDEBUG__REMOTE_HOST: host.docker.internal
       PHP_INI_XDEBUG__REMOTE_PORT: 9001
       PHP_INI_XDEBUG__REMOTE_LOG: /tmp/xdebug.log
@@ -59,9 +62,10 @@ services:
       - nginx:api.notifications.testing.ezf.develop
     links:
       - redis
-      - mysql
+      - mariadb
       - rabbitmq
       - postgres
+      - ezf_mongo
 
   postgres:
     image: postgres
@@ -71,7 +75,7 @@ services:
     ports:
       - "15432:5432"
     volumes:
-      - ./databases:/var/lib/postgresql/data
+      - ./databases/postgres:/var/lib/postgresql/data
 
   pgadmin:
     image: dpage/pgadmin4
@@ -86,9 +90,24 @@ services:
     links:
       - postgres
 
-  mysql:
-    container_name: ezf_mysql
-    image: mysql:5.7
+#  mysql:
+#    container_name: ezf_mysql
+#    image: mysql:5.7
+#    ports:
+#      - 3306:3306
+#    volumes:
+#      - ./databases:/var/lib/mysql
+#      - ./logs/mysql:/var/log/mysql
+#    environment:
+#      MYSQL_ROOT_PASSWORD: secret_password
+#      MYSQL_DATABASE: ezf_academy
+#      MYSQL_USER: ezf
+#      MYSQL_PASSWORD: BZQbdXhP7J*viO0%cJ0nPfu2
+
+  mariadb:
+    container_name: ezf_mariadb
+    image: mariadb:10.3.14
+    restart: always
     ports:
       - 3306:3306
     volumes:
@@ -100,20 +119,26 @@ services:
       MYSQL_USER: ezf
       MYSQL_PASSWORD: BZQbdXhP7J*viO0%cJ0nPfu2
 
-  phpmyadmin:
-    container_name: ezf_pma
-    image: phpmyadmin/phpmyadmin
+  adminer:
+    image: adminer
     restart: always
     ports:
-      - 8084:80
-    links:
-      - app
-      - mysql
-    environment:
-      MYSQL_USERNAME: root
-      MYSQL_ROOT_PASSWORD: secret_password
-      PMA_HOST: mysql
-      PMA_ARBITRARY: 1
+      - 8084:8080
+
+#  phpmyadmin:
+#    container_name: ezf_pma
+#    image: phpmyadmin/phpmyadmin
+#    restart: always
+#    ports:
+#      - 8084:80
+#    links:
+#      - app
+#      - mysql
+#    environment:
+#      MYSQL_USERNAME: root
+#      MYSQL_ROOT_PASSWORD: secret_password
+#      PMA_HOST: mysql
+#      PMA_ARBITRARY: 1
 
   redis:
     image: redis
@@ -131,3 +156,8 @@ services:
       - RABBITMQ_DEFAULT_PASS=guest
     ports:
       - 8085:15672
+
+  ezf_mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
