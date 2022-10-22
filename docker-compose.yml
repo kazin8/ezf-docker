@@ -16,7 +16,7 @@ services:
   app:
     container_name: ezf_app
     restart: "no"
-    image: thecodingmachine/php:7.2-v2-fpm
+    image: thecodingmachine/php:7.4-v3-fpm
     volumes:
       - ../../api:/var/www/html
       - $SSH_AUTH_SOCK:/ssh-agent
@@ -28,9 +28,9 @@ services:
       PHP_EXTENSION_BCMATH: 1
       PHP_EXTENSION_SOAP: 1
       PHP_EXTENSION_INTL: 1
-      PHP_EXTENSION_MEMCACHED: 1
       PHP_EXTENSION_MONGODB: 1
       PHP_EXTENSION_SOCKETS: 1
+      PHP_EXTENSION_GRPC: 1
       PHP_INI_XDEBUG__REMOTE_HOST: host.docker.internal
       PHP_INI_XDEBUG__REMOTE_PORT: 9001
       PHP_INI_XDEBUG__REMOTE_LOG: /tmp/xdebug.log
@@ -40,10 +40,16 @@ services:
       PHP_INI_XDEBUG__CLI_COLOR: 1
       PHP_IDE_CONFIG: "serverName=docker_academy"
       XDEBUG_CONFIG: "idekey=PHPSTORM max_nesting_level=1500"
-      STARTUP_COMMAND_1: sudo apt-get install -y ssmtp
-      STARTUP_COMMAND_2: sudo chmod 777 /etc/ssmtp/ssmtp.conf && sudo touch /usr/local/etc/php/conf.d/mail.ini && sudo chmod 777 /usr/local/etc/php/conf.d/mail.ini
-      STARTUP_COMMAND_3: echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf && echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail.ini
+      STARTUP_COMMAND_1: sudo apt-get update
+      STARTUP_COMMAND_2: sudo apt-get install -y ssmtp
+      STARTUP_COMMAND_3: sudo chmod 777 -R /etc/ssmtp/ && sudo touch /etc/php/7.4/fpm/conf.d/mail.ini && sudo chmod 777 /etc/php/7.4/fpm/conf.d/mail.ini
+      STARTUP_COMMAND_4: sudo touch /etc/php/7.4/cli/conf.d/mail.ini && sudo chmod 777 /etc/php/7.4/cli/conf.d/mail.ini
+      STARTUP_COMMAND_5: echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf && echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /etc/php/7.4/fpm/conf.d/mail.ini && echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /etc/php/7.4/cli/conf.d/mail.ini
+      STARTUP_COMMAND_6: sudo chmod 777 -R /home/docker/.composer/ && sudo chmod 777 -R /usr/local/bin/
+      STARTUP_COMMAND_7: composer self-update --2
     external_links:
+      - nginx:router.ezf.develop
+      - nginx:api.course.ezf.develop
       - nginx:api.academy.ezf.develop
       - nginx:api.contacts.ezf.develop
       - nginx:api.funnels.ezf.develop
@@ -60,53 +66,24 @@ services:
       - nginx:api.cloud.ezf.develop
       - nginx:api.notifications.ezf.develop
       - nginx:api.notifications.testing.ezf.develop
+      - nginx:api.course.testing.ezf.develop
+      - nginx:api.webinar.ezf.develop
+      - nginx:api.webinar.testing.ezf.develop
+      - nginx:api.statistic.testing.ezf.develop
+      - nginx:api.zapier.ezf.develop
+      - nginx:api.zapier.testing.ezf.develop
+      - nginx:api.links.ezf.develop
     links:
       - redis
       - mariadb
       - rabbitmq
-      - postgres
       - ezf_mongo
-
-  postgres:
-    image: postgres
-    container_name: ezf_postgres
-    environment:
-      POSTGRES_PASSWORD: "password"
-    ports:
-      - "15432:5432"
-    volumes:
-      - ./databases/postgres:/var/lib/postgresql/data
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: ezf_pga
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "kazin8@gmail.com"
-      PGADMIN_DEFAULT_PASSWORD: "password"
-    ports:
-      - "8086:80"
-    depends_on:
-      - postgres
-    links:
-      - postgres
-
-#  mysql:
-#    container_name: ezf_mysql
-#    image: mysql:5.7
-#    ports:
-#      - 3306:3306
-#    volumes:
-#      - ./databases:/var/lib/mysql
-#      - ./logs/mysql:/var/log/mysql
-#    environment:
-#      MYSQL_ROOT_PASSWORD: secret_password
-#      MYSQL_DATABASE: ezf_academy
-#      MYSQL_USER: ezf
-#      MYSQL_PASSWORD: BZQbdXhP7J*viO0%cJ0nPfu2
+      - blackfire
+      #- cratedb
 
   mariadb:
     container_name: ezf_mariadb
-    image: mariadb:10.3.14
+    image: mariadb:10.5.8
     restart: always
     ports:
       - 3306:3306
@@ -125,26 +102,14 @@ services:
     ports:
       - 8084:8080
 
-#  phpmyadmin:
-#    container_name: ezf_pma
-#    image: phpmyadmin/phpmyadmin
-#    restart: always
-#    ports:
-#      - 8084:80
-#    links:
-#      - app
-#      - mysql
-#    environment:
-#      MYSQL_USERNAME: root
-#      MYSQL_ROOT_PASSWORD: secret_password
-#      PMA_HOST: mysql
-#      PMA_ARBITRARY: 1
 
   redis:
     image: redis
     container_name: ezf_redis
     restart: "no"
     command: redis-server --requirepass 12345678
+    ports:
+      - 7001:6379
 
   rabbitmq:
     image: rabbitmq:management
@@ -161,3 +126,10 @@ services:
     image: mongo
     ports:
       - "27017:27017"
+
+#  cratedb:
+#    image: crate:latest
+#    ports:
+#      - "4201:4200"
+#    volumes:
+#      - ./cratedb:/data
